@@ -59,7 +59,7 @@ Designed for **smart disaster management, environmental monitoring, and land-use
 
 ---
 
-## 📸 Screenshots (Placeholder)
+## 📸 Screenshots
 <img width="1687" height="566" alt="image" src="https://github.com/user-attachments/assets/875334c8-53ec-4eca-b6b4-c64805f15230" />
  
 
