@@ -1,0 +1,32 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+android:width="108dp"
+android:height="108dp"
+android:viewportWidth="108"
+android:viewportHeight="108">
+<group>
+    <!-- The Grid lines -->
+    <path
+        android:strokeColor="@color/white"
+        android:strokeWidth="1.5"
+        android:pathData="M36,0L36,108 M72,0L72,108 M0,36L108,36 M0,72L108,72"/>
+    <!-- The Sky/Cloud element -->
+    <path
+        android:fillColor="@color/white"
+        android:pathData="M54,40
+                          C45,40 40,45 40,54
+                          C40,63 45,70 54,70
+                          C63,70 70,63 70,54
+                          C70,45 63,40 54,40
+                          M54,42
+                          A12,12 0 1,1 54,66
+                          A12,12 0 1,1 54,42 Z"/>
+    <path
+        android:fillColor="@color/white"
+        android:pathData="M45,50
+                          C42,50 40,52 40,55
+                          C40,58 42,60 45,60
+                          L63,60
+                          C66,60 68,58 68,55
+                          C68,52 66,50 63,50 Z"/>
+</group>
+</vector>

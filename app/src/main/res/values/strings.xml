@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">SkyGrid</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="slogen_app">Smart Vision for Smarter Land Decisions.</string>
+    <string name="land_analysis">Land Analysis</string>
+    <string name="detection_summary">Detection Summary</string>
+    <string name="detected_categories">Detected Categories</string>
+    <string name="edit_profile">Edit Profile</string>
+</resources>

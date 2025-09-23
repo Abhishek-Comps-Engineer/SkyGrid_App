@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="8dp"
+    android:layout_marginVertical="8dp"
+    app:cardCornerRadius="12dp"
+    app:cardElevation="2dp"
+    android:clickable="true"
+    android:focusable="true"
+    android:foreground="?android:attr/selectableItemBackground">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="12dp">
+
+        <!-- Thumbnail of the analyzed image -->
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/history_item_image"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:scaleType="centerCrop"
+            app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Medium"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            tools:src="@tools:sample/backgrounds/scenic" />
+
+        <!-- Analysis Type (e.g., Crop Analysis) -->
+        <TextView
+            android:id="@+id/history_item_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="8dp"
+            android:textColor="@color/text_color_primary"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toEndOf="@id/history_item_image"
+            app:layout_constraintTop_toTopOf="@id/history_item_image"
+            app:layout_constraintEnd_toStartOf="@id/arrow_icon"
+            tools:text="Crop Analysis" />
+
+        <!-- Timestamp -->
+        <TextView
+            android:id="@+id/history_item_timestamp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:textColor="@color/text_color_secondary"
+            android:textSize="14sp"
+            app:layout_constraintStart_toStartOf="@id/history_item_title"
+            app:layout_constraintTop_toBottomOf="@id/history_item_title"
+            tools:text="August 10, 2025" />
+
+        <!-- Status Chip (e.g., "Dangerous", "75% Healthy") -->
+        <com.google.android.material.chip.Chip
+            android:id="@+id/history_item_status_chip"
+            android:layout_width="wrap_content"
+            android:layout_height="32dp"
+            android:layout_marginTop="8dp"
+            android:textStyle="bold"
+            app:chipBackgroundColor="@color/red_danger"
+            android:textColor="@color/white"
+            app:layout_constraintStart_toStartOf="@id/history_item_timestamp"
+            app:layout_constraintTop_toBottomOf="@id/history_item_timestamp"
+            tools:text="Condition: Dangerous"/>
+
+        <!-- Arrow icon to indicate tappable item -->
+        <ImageView
+            android:id="@+id/arrow_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_arrow_forward"
+            app:tint="@color/sky_blue_medium"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</com.google.android.material.card.MaterialCardView>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#0288D1</color> <!-- A deeper sky blue for app bars -->
+    <color name="colorPrimaryDark">#01579B</color> <!-- A darker shade for the status bar -->
+    <color name="colorAccent">#40C4FF</color> <!-- A light, vibrant sky blue for accents -->
+    <color name="sky_blue_light">#E1F5FE</color> <!-- Very light blue for backgrounds -->
+    <color name="sky_blue_medium">#B3E5FC</color> <!-- A soft blue for card backgrounds -->
+    <color name="text_color_primary">#212121</color>
+    <color name="text_color_secondary">#757575</color>
+    <color name="white">#FFFFFF</color>
+    <color name="green_healthy">#66BB6A</color>
+    <color name="red_danger">#EF5350</color>
+</resources>
