@@ -1,6 +1,5 @@
 package com.example.abhishek.project.internship.viewmodels
 
-import android.graphics.Bitmap
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -8,30 +7,29 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.example.abhishek.project.internship.model.DetectionResult
-import com.example.abhishek.project.internship.repositories.UserRepository
+import com.example.abhishek.project.internship.model.LandDetection
+import com.example.abhishek.project.internship.repositories.LandRepository
+import com.example.abhishek.project.internship.repositories.ObjectRepository
 import kotlinx.coroutines.launch
+const val TAG: String = "LandDetectionViewModel"
 
 
-sealed class DetectionUIState {
-    object Idle : DetectionUIState()
-    object Loading : DetectionUIState()
-    data class Success(val result: DetectionResult) : DetectionUIState()
-    data class Error(val message: String) : DetectionUIState()
-}
 
-class DetectionViewModel(private val repo: UserRepository) : ViewModel() {
+
+
+class LandDetectionViewModel(private val repo: LandRepository) : ViewModel() {
 
     private val _uiState = MutableLiveData<DetectionUIState>(DetectionUIState.Idle)
     val uiState: LiveData<DetectionUIState> get() = _uiState
 
     fun detectObjects(imageBytes: ByteArray, filename: String) {
-        Log.d("DetectionViewModel", "detectObjects() called with filename=$filename")
+        Log.d(TAG, "detectLands() called with filename=$filename")
         _uiState.value = DetectionUIState.Loading
         viewModelScope.launch {
 
             repo.detectImage(imageBytes, filename)
                 .onSuccess { result ->
-                    Log.d("DetectionViewModel", "Detection success: ${result.detections.size} objects")
+                    Log.d(TAG, "Detection success: ${result.predicted_class}")
                     _uiState.value = DetectionUIState.Success(result)
                 }
                 .onFailure { error ->
@@ -42,14 +40,11 @@ class DetectionViewModel(private val repo: UserRepository) : ViewModel() {
     }
 }
 
-class DetectionViewModelFactory(
-    private val repo: UserRepository
-) : ViewModelProvider.Factory {
-    override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        if (modelClass.isAssignableFrom(DetectionViewModel::class.java)) {
-            @Suppress("UNCHECKED_CAST")
-            return DetectionViewModel(repo) as T
-        }
-        throw IllegalArgumentException("Unknown ViewModel class")
-    }
+
+sealed class LandUIState {
+    object Idle : LandUIState()
+    object Loading : LandUIState()
+    data class Success(val result: LandDetection) : LandUIState()
+    data class Error(val message: String) : LandUIState()
 }
+
