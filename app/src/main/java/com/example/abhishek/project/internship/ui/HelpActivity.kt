@@ -1,2 +1,4 @@
-package com.example.abhishek.project.internship.ui 
+package com.example.abhishek.project.internship.ui
 
+class HelpActivity {
+}

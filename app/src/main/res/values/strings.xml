@@ -7,4 +7,9 @@
     <string name="detection_summary">Detection Summary</string>
     <string name="detected_categories">Detected Categories</string>
     <string name="edit_profile">Edit Profile</string>
+    <string name="flood_detection">Flood Detection</string>
+    <string name="change_image">Change Image</string>
+    <string name="upload_land_image">Upload Land Image</string>
+    <string name="suggested_use_cases">Suggested Use Cases</string>
+    <string name="analyze_land">Analyze Land</string>
 </resources>

@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/sky_blue_light"
     android:scrollbars="none"
-    tools:context=".fragments.HelpFragment">
+    tools:context=".ui.HelpActivity">
 
     <LinearLayout
         android:layout_width="match_parent"

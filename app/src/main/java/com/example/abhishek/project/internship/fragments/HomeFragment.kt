@@ -10,7 +10,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.abhishek.project.internship.ui.MainActivity
 import com.example.abhishek.project.internship.R
 import com.example.abhishek.project.internship.adapters.RecentActivityAdapter
 import com.example.abhishek.project.internship.ui.FloodActivity
@@ -67,7 +66,7 @@ class HomeFragment : Fragment() {
         }
 
         cardRoadSurvey.setOnClickListener {
-            openActivity(PotholeActivity::class.java, mapOf("feature_name" to "Road Survey"))
+//            openActivity(PotholeActivity::class.java, mapOf("feature_name" to "Road Survey"))
         }
 
 

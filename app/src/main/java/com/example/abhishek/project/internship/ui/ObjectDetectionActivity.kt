@@ -11,16 +11,16 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
+import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.example.abhishek.project.internship.R
 import com.example.abhishek.project.internship.model.ObjectDetection
-import com.example.abhishek.project.internship.repositories.UserRepository
-import com.example.abhishek.project.internship.viewmodels.DetectionUIState
+import com.example.abhishek.project.internship.repositories.ObjectRepository
+import com.example.abhishek.project.internship.viewmodels.AppViewModelFactory
 import com.example.abhishek.project.internship.viewmodels.DetectionViewModel
-import com.example.abhishek.project.internship.viewmodels.DetectionViewModelFactory
+import com.example.abhishek.project.internship.viewmodels.ObjectDetectionUIState
 import com.google.android.material.button.MaterialButtonToggleGroup
 
 class ObjectDetectionActivity : AppCompatActivity() {
@@ -38,9 +38,8 @@ class ObjectDetectionActivity : AppCompatActivity() {
 
     private var originalBitmap: Bitmap? = null
 
-    private val viewModel: DetectionViewModel by viewModels {
-        DetectionViewModelFactory(UserRepository())
-    }
+    private lateinit var viewModel: DetectionViewModel
+
 
     private val pickImage = registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
         Log.d("ObjectDetectionActivity", "Image Picked")
@@ -61,6 +60,15 @@ class ObjectDetectionActivity : AppCompatActivity() {
         detectedLinearLayout = findViewById<LinearLayout>(R.id.results_dashboard)
         btnDetect = findViewById(R.id.btn_detect_objects)
         toggleGroup = findViewById(R.id.toggle_button_group)
+
+        val repo = ObjectRepository()
+
+        viewModel = ViewModelProvider(
+            this,
+            AppViewModelFactory {
+                DetectionViewModel(repo)
+            }
+        ).get(DetectionViewModel::class.java)
 
         toggleGroup.addOnButtonCheckedListener { group, checkedId, isChecked ->
             if (isChecked) {
@@ -126,9 +134,9 @@ class ObjectDetectionActivity : AppCompatActivity() {
     private fun observeViewModel() {
         viewModel.uiState.observe(this) { state ->
             when (state) {
-                is DetectionUIState.Idle -> progressOverlay.isVisible = false
-                is DetectionUIState.Loading -> progressOverlay.isVisible = true
-                is DetectionUIState.Success -> {
+                is ObjectDetectionUIState.Idle -> progressOverlay.isVisible = false
+                is ObjectDetectionUIState.Loading -> progressOverlay.isVisible = true
+                is ObjectDetectionUIState.Success -> {
                     progressOverlay.isVisible = false
                     toggleGroup.isVisible = true
                     summaryText.text = "Found ${state.result.detections.size} objects"
@@ -142,7 +150,7 @@ class ObjectDetectionActivity : AppCompatActivity() {
                     }
 
                 }
-                is DetectionUIState.Error -> {
+                is ObjectDetectionUIState.Error -> {
                     progressOverlay.isVisible = false
                     Toast.makeText(this, state.message, Toast.LENGTH_SHORT).show()
                 }

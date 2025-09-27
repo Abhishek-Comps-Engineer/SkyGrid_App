@@ -1,6 +1,7 @@
 package com.example.abhishek.project.internship.fragments
 
 import android.content.Intent
+import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -16,10 +17,13 @@ import com.bumptech.glide.Glide
 //import com.bumptech.glide.R
 import com.example.abhishek.project.internship.databinding.FragmentSettingsBinding
 import com.example.abhishek.project.internship.registeration.LoginActivity
+import com.example.abhishek.project.internship.viewmodels.SettingsUIState
 //import com.example.abhishek.project.internship.ui.EditProfileActivity
 import com.example.abhishek.project.internship.viewmodels.SettingsViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class SettingsFragment : Fragment() {
 
@@ -27,6 +31,9 @@ class SettingsFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val viewModel: SettingsViewModel by viewModels()
+
+    private var selectedImageBytes: ByteArray? = null
+    private var selectedFilename: String = "profile_image.jpg"
 
 
     override fun onCreateView(
@@ -75,7 +82,6 @@ class SettingsFragment : Fragment() {
         }
 
 
-        // Change Password
         binding.changePasswordRow.setOnClickListener {
             val action = viewModel.onChangePasswordClicked()
         }
@@ -85,16 +91,42 @@ class SettingsFragment : Fragment() {
             val action = viewModel.onEditProfileClicked()
         }
 
-        viewModel.profileImageUrl.observe(viewLifecycleOwner) { url ->
-            if (!url.isNullOrEmpty()) {
-                Glide.with(this).load(url).into(binding.profileImage)
-            } else {
-//                binding.profileImage.setImageDrawable(R.id.)
-            }
+        binding.helpRow.setOnClickListener {
+            val action = viewModel.helpClicked()
+        }
+
+        val pickImageLauncher = registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
+            uri?.let { handleImageSelected(it) }
         }
 
         binding.profileImage.setOnClickListener {
             pickImageLauncher.launch("image/*")
+        }
+
+        viewModel.profileImageUrl.observe(viewLifecycleOwner) { url ->
+            if (!url.isNullOrEmpty()) {
+                Glide.with(this).load(url).into(binding.profileImage)
+                viewModel.uploadProfileImage()
+                // If you want second preview:
+//                 Glide.with(this).load(url).into(binding.profileImageAnnotated)
+            }
+        }
+
+        viewModel.uiState.observe(viewLifecycleOwner) { state ->
+            when (state) {
+                is SettingsUIState.Idle -> { /* no-op */ }
+                is SettingsUIState.Loading -> Toast.makeText(requireContext(), "Uploading...", Toast.LENGTH_SHORT).show()
+                is SettingsUIState.Success -> {
+                    Toast.makeText(requireContext(), "Profile image uploaded", Toast.LENGTH_SHORT).show()
+
+                    state.result.profileImage_url?.let { url ->
+                        Glide.with(this).load(url).into(binding.profileImage)
+                        // Optional: second preview
+                        // Glide.with(this).load(url).into(binding.profileImageAnnotated)
+                    }
+                }
+                is SettingsUIState.Error -> Toast.makeText(requireContext(), "Error: ${state.message}", Toast.LENGTH_SHORT).show()
+            }
         }
 
         viewModel.action.observe(viewLifecycleOwner) { action ->
@@ -103,9 +135,33 @@ class SettingsFragment : Fragment() {
                 "Edit Profile" -> {
 //                    startActivity(Intent(requireContext(), EditProfileActivity::class.java))
                 }
-                "Change Password" -> { /* navigate */ }
+                "Change Password" -> {
+                /* navigate */
+                }
+                "Help" -> {
+//                    startActivity(Intent(requireContext(), EditProfileActivity::class.java))
+                }
 
             }
+        }
+    }
+
+    private fun handleImageSelected(uri: Uri) {
+        try {
+            val inputStream = requireContext().contentResolver.openInputStream(uri)
+
+            lifecycleScope.launch(Dispatchers.IO) {
+                val bytes: ByteArray?= inputStream?.readBytes()
+                val bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes!!.size)
+                withContext(Dispatchers.Main) {
+                    binding.profileImage.setImageBitmap(bitmap)
+                    viewModel.uploadProfileImage(imageBytes = bytes)
+                }
+            }
+
+        } catch (e: Exception) {
+            e.printStackTrace()
+            Toast.makeText(requireContext(), "Failed to read image", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -114,11 +170,11 @@ class SettingsFragment : Fragment() {
         _binding = null
     }
 
-    private val pickImageLauncher = registerForActivityResult(
-        ActivityResultContracts.GetContent()
-    ) { uri: Uri? ->
-        uri?.let { viewModel.uploadProfileImage(it) }
-    }
+//    private val pickImageLauncher = registerForActivityResult(
+//        ActivityResultContracts.GetContent()
+//    ) { uri: Uri? ->
+//        uri?.let { viewModel.uploadProfileImage(it) }
+//    }
 
 
 }
