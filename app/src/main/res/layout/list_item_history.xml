@@ -1,16 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="@dimen/_90sdp"
     android:layout_marginHorizontal="8dp"
     android:layout_marginVertical="8dp"
     app:cardCornerRadius="12dp"
-    app:cardElevation="2dp"
+    app:cardElevation="6dp"
+    app:shapeAppearanceOverlay="@color/white"
     android:clickable="true"
-    android:focusable="true"
-    android:foreground="?android:attr/selectableItemBackground">
+    android:focusable="true">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -37,12 +38,12 @@
             android:layout_marginStart="16dp"
             android:layout_marginEnd="8dp"
             android:textColor="@color/text_color_primary"
-            android:textSize="18sp"
+            android:textSize="@dimen/_18ssp"
             android:textStyle="bold"
             app:layout_constraintStart_toEndOf="@id/history_item_image"
             app:layout_constraintTop_toTopOf="@id/history_item_image"
             app:layout_constraintEnd_toStartOf="@id/arrow_icon"
-            tools:text="Crop Analysis" />
+            tools:text="Flood Analysis" />
 
         <!-- Timestamp -->
         <TextView
@@ -67,7 +68,7 @@
             android:textColor="@color/white"
             app:layout_constraintStart_toStartOf="@id/history_item_timestamp"
             app:layout_constraintTop_toBottomOf="@id/history_item_timestamp"
-            tools:text="Condition: Dangerous"/>
+            tools:text="Confidence: Dangerous"/>
 
         <!-- Arrow icon to indicate tappable item -->
         <ImageView

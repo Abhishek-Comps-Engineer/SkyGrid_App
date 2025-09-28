@@ -36,7 +36,7 @@
             android:name=".ui.MainActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.ObjectDetectionActivity"
+            android:name=".ui.ObjectActivity"
             android:exported="false" />
 
         <activity

@@ -14,6 +14,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
+import com.example.abhishek.project.internship.R
 //import com.bumptech.glide.R
 import com.example.abhishek.project.internship.databinding.FragmentSettingsBinding
 import com.example.abhishek.project.internship.registeration.LoginActivity
@@ -106,23 +107,16 @@ class SettingsFragment : Fragment() {
         viewModel.profileImageUrl.observe(viewLifecycleOwner) { url ->
             if (!url.isNullOrEmpty()) {
                 Glide.with(this).load(url).into(binding.profileImage)
-                viewModel.uploadProfileImage()
-                // If you want second preview:
-//                 Glide.with(this).load(url).into(binding.profileImageAnnotated)
             }
         }
 
         viewModel.uiState.observe(viewLifecycleOwner) { state ->
             when (state) {
-                is SettingsUIState.Idle -> { /* no-op */ }
-                is SettingsUIState.Loading -> Toast.makeText(requireContext(), "Uploading...", Toast.LENGTH_SHORT).show()
+                is SettingsUIState.Idle -> { }
+                is SettingsUIState.Loading -> { }
                 is SettingsUIState.Success -> {
-                    Toast.makeText(requireContext(), "Profile image uploaded", Toast.LENGTH_SHORT).show()
-
                     state.result.profileImage_url?.let { url ->
                         Glide.with(this).load(url).into(binding.profileImage)
-                        // Optional: second preview
-                        // Glide.with(this).load(url).into(binding.profileImageAnnotated)
                     }
                 }
                 is SettingsUIState.Error -> Toast.makeText(requireContext(), "Error: ${state.message}", Toast.LENGTH_SHORT).show()
@@ -144,6 +138,32 @@ class SettingsFragment : Fragment() {
 
             }
         }
+
+
+        viewModel.fetchProfile(binding.emailRow.text.toString())
+
+        viewModel.uiState.observe(viewLifecycleOwner) { state ->
+            when (state) {
+                is SettingsUIState.Loading -> {
+                }
+                is SettingsUIState.Success -> {
+                    binding.emailRow.text = state.result.email
+
+                    Glide.with(requireContext())
+                        .load(state.result.profileImage_url)
+                        .placeholder(R.drawable.ic_profile)
+                        .error(R.drawable.ic_profile)
+                        .into(binding.profileImage)
+                }
+                is SettingsUIState.Error -> {
+                    Toast.makeText(requireContext(), state.message, Toast.LENGTH_SHORT).show()
+                }
+
+                SettingsUIState.Idle -> TODO()
+            }
+        }
+
+
     }
 
     private fun handleImageSelected(uri: Uri) {
@@ -151,11 +171,18 @@ class SettingsFragment : Fragment() {
             val inputStream = requireContext().contentResolver.openInputStream(uri)
 
             lifecycleScope.launch(Dispatchers.IO) {
+
+                val email = binding.emailRow.text.toString()
                 val bytes: ByteArray?= inputStream?.readBytes()
                 val bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes!!.size)
+
                 withContext(Dispatchers.Main) {
                     binding.profileImage.setImageBitmap(bitmap)
-                    viewModel.uploadProfileImage(imageBytes = bytes)
+                    if (email.isNotEmpty() && bytes != null) {
+                        viewModel.uploadProfileImage(email, bytes)
+                    } else {
+                        Toast.makeText(requireContext(), "Email or image missing", Toast.LENGTH_SHORT).show()
+                    }
                 }
             }
 
@@ -169,12 +196,5 @@ class SettingsFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
-
-//    private val pickImageLauncher = registerForActivityResult(
-//        ActivityResultContracts.GetContent()
-//    ) { uri: Uri? ->
-//        uri?.let { viewModel.uploadProfileImage(it) }
-//    }
-
 
 }

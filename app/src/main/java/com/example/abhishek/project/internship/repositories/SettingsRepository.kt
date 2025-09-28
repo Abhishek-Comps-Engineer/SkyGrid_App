@@ -51,13 +51,30 @@ class SettingsRepository(private val context: Context) {
 //        }
 //    }
 
-    suspend fun profileImage(email:String,imageBytes: ByteArray, filename: String): Result<UserProfile> {
+    suspend fun fetchProfile(email: String): Result<UserProfile> {
         return withContext(Dispatchers.IO) {
             try {
-                Log.d(TAG, "Uploading file: $filename, size=${imageBytes.size} bytes")
+                val response = RetrofitClient.api.getProfile(email) // define GET endpoint
+                val fullUrl = response.profileImage_url
+                    ?.replace("\\", "/")
+                    ?.let { RetrofitClient.BASE_URL + it }
+
+                val processedResponse = response.copy(profileImage_url = fullUrl.toString())
+                Result.success(processedResponse)
+            } catch (e: Exception) {
+                Log.e(TAG, "Error fetching profile", e)
+                Result.failure(e)
+            }
+        }
+    }
+
+    suspend fun profileImage(email:String,imageBytes: ByteArray): Result<UserProfile> {
+        return withContext(Dispatchers.IO) {
+            try {
+                Log.d(TAG, "Uploading file:, size=${imageBytes.size} bytes")
 
                 val reqFile = imageBytes.toRequestBody("image/jpeg".toMediaTypeOrNull())
-                val bodyPart = MultipartBody.Part.createFormData("file", filename, reqFile)
+                val bodyPart = MultipartBody.Part.createFormData("image" ,"myfile.jpg",reqFile)
 
                 // Create RequestBody for email
                 val emailPart = email.toRequestBody("text/plain".toMediaTypeOrNull())

@@ -2,7 +2,6 @@ package com.example.abhishek.project.internship.repositories
 
 import android.util.Log
 import com.example.abhishek.project.internship.data.RetrofitClient
-import com.example.abhishek.project.internship.model.DetectionResult
 import com.example.abhishek.project.internship.model.LandDetection
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext

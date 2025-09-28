@@ -11,13 +11,6 @@ import okhttp3.RequestBody
 
 class ObjectRepository {
 
-//    fun updateProfile(name: String, email: String, onResult: (Boolean) -> Unit) {
-//        firebaseHelper.updateUserProfile(name, email, onResult)
-//    }
-//
-//    fun uploadProfileImage(uri: Uri, onResult: (Boolean, String?) -> Unit) {
-//        firebaseHelper.uploadProfileImage(uri, onResult)
-//    }
     suspend fun detectImage(imageBytes: ByteArray, filename: String): Result<DetectionResult> {
         return withContext(Dispatchers.IO) {
             try {

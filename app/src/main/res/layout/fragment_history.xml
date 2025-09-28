@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/sky_blue_light"
-    tools:context=".HistoryFragment">
+    tools:context=".fragments.HistoryFragment">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -23,20 +23,32 @@
             android:textStyle="bold"
             android:padding="16dp"/>
 
-        <!-- The RecyclerView that will be populated with history items -->
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/history_recycler_view"
+
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:clipToPadding="false"
-            android:paddingHorizontal="8dp"
-            android:paddingBottom="16dp"
-            tools:listitem="@layout/list_item_history" />
+            android:layout_height="match_parent">
+
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/historyRecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:clipToPadding="false"
+                android:paddingHorizontal="8dp"
+                android:paddingBottom="16dp"
+                tools:listitem="@layout/list_item_history" />
+
+            <ProgressBar
+                android:id="@+id/progressBar"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_gravity="center"
+                android:visibility="gone"/>
+        </FrameLayout>
+
 
     </LinearLayout>
 
-    <!-- Empty State View: Shown only when the RecyclerView is empty -->
     <LinearLayout
         android:id="@+id/empty_state_view"
         android:layout_width="wrap_content"

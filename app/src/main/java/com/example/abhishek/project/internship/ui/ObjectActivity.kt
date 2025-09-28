@@ -23,7 +23,7 @@ import com.example.abhishek.project.internship.viewmodels.DetectionViewModel
 import com.example.abhishek.project.internship.viewmodels.ObjectDetectionUIState
 import com.google.android.material.button.MaterialButtonToggleGroup
 
-class ObjectDetectionActivity : AppCompatActivity() {
+class ObjectActivity : AppCompatActivity() {
 
     private lateinit var imagePreview: ImageView
     private lateinit var imagePlaceholder: LinearLayout

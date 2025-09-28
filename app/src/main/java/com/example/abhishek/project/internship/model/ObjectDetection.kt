@@ -5,3 +5,8 @@ data class ObjectDetection (
         val confidence: Double,
         val bbox: List<List<Double>>?
 )
+
+data class DetectionResult(
+        val detections: List<ObjectDetection> = emptyList(),
+        val result_image_url: String? = null
+)

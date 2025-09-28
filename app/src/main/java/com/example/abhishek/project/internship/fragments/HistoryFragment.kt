@@ -1,60 +1,72 @@
 package com.example.abhishek.project.internship.fragments
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.example.abhishek.project.internship.R
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.abhishek.project.internship.adapters.HistoryAdapter
+import com.example.abhishek.project.internship.databinding.FragmentHistoryBinding
+import com.example.abhishek.project.internship.repositories.HistoryRepository
+import com.example.abhishek.project.internship.viewmodels.AppViewModelFactory
+import com.example.abhishek.project.internship.viewmodels.HistoryViewModel
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [HistoryFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class HistoryFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
+    private var _binding: FragmentHistoryBinding? = null
+    private val binding get() = _binding!!
+    private val TAG = "HistoryFragment"
+    private val repo = HistoryRepository()
+    private lateinit var viewModel: HistoryViewModel
+    private lateinit var adapter: HistoryAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_history, container, false)
+    ): View {
+        _binding = FragmentHistoryBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment HistoryFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            HistoryFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        viewModel = ViewModelProvider(
+            this,
+            AppViewModelFactory { HistoryViewModel(repo) }
+        )[HistoryViewModel::class.java]
+
+        adapter = HistoryAdapter(emptyList())
+        binding.historyRecyclerView.layoutManager = LinearLayoutManager(requireContext())
+        binding.historyRecyclerView.adapter = adapter
+
+        viewModel.history.observe(viewLifecycleOwner) { list ->
+            Log.d(TAG, "History data received: ${list.size} items")
+            adapter.updateData(list)
+
+            binding.emptyStateView.visibility = if (list.isEmpty()) View.VISIBLE else View.GONE
+        }
+
+        viewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
+            Log.d(TAG, "Loading state: $isLoading")
+            binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+        }
+
+        viewModel.error.observe(viewLifecycleOwner) { error ->
+            if (error != null) {
+                Log.e(TAG, "Error fetching history: $error")
             }
+        }
+        viewModel.loadHistory(page = 1, limit = 20)
+        Log.d(TAG, "Loading history from page 1, limit 20")
+
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

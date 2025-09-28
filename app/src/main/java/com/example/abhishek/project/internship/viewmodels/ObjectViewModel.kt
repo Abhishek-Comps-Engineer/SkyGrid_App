@@ -10,8 +10,6 @@ import com.example.abhishek.project.internship.repositories.ObjectRepository
 import kotlinx.coroutines.launch
 
 
-
-
 class DetectionViewModel(private val repo: ObjectRepository) : ViewModel() {
 
     private val _uiState = MutableLiveData<ObjectDetectionUIState>(ObjectDetectionUIState.Idle)

@@ -372,11 +372,13 @@
                 android:orientation="vertical"
                 android:padding="16dp"
                 android:gravity="center">
+
                 <ImageView
                     android:layout_width="50dp"
                     android:layout_height="50dp"
                     android:src="@drawable/ic_road"
                     app:tint="@color/colorPrimary"/>
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -385,6 +387,7 @@
                     android:layout_marginTop="8dp"
                     android:textColor="@color/text_color_primary"
                     android:textAlignment="center"/>
+
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 

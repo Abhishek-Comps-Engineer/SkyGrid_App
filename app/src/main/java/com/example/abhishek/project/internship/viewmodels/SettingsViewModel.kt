@@ -32,15 +32,27 @@ class SettingsViewModel(application: Application) : AndroidViewModel(application
     private val _uiState = MutableLiveData<SettingsUIState>(SettingsUIState.Idle)
     val uiState: LiveData<SettingsUIState> get() = _uiState
 
+    fun fetchProfile(email: String) {
+        _uiState.value = SettingsUIState.Loading
+
+        viewModelScope.launch {
+            val result = repository.fetchProfile(email)
+            result.fold(
+                onSuccess = { _uiState.value = SettingsUIState.Success(it) },
+                onFailure = { _uiState.value = SettingsUIState.Error(it.localizedMessage ?: "Unknown error") }
+            )
+        }
+    }
+
+
     fun uploadProfileImage(email:String = repositoryAuth.getCurrentUserEmail(),
                            imageBytes: ByteArray,
-                           filename: String
     ) {
-        Log.d(TAG, "detectLands() called with filename=$filename")
-        _uiState.value = SettingsUIState.Loading
+        Log.d(TAG, "Uploading Profile Image")
+        _uiState.postValue(SettingsUIState.Loading)
         viewModelScope.launch {
 
-            repository.profileImage(email,imageBytes, filename)
+            repository.profileImage(email,imageBytes)
                 .onSuccess { result ->
                     Log.d(TAG, "Profile upload success: ${result.profileImage_url}")
                     _uiState.value = SettingsUIState.Success(result)
@@ -52,7 +64,6 @@ class SettingsViewModel(application: Application) : AndroidViewModel(application
     }
     fun getUserName() = repositoryAuth.getCurrentUserName()
     fun getUserEmail() = repositoryAuth.getCurrentUserEmail()
-
 
     fun setDarkMode(enabled: Boolean) {
         viewModelScope.launch {
