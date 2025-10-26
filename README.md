@@ -60,7 +60,16 @@ Designed for **smart disaster management, environmental monitoring, and land-use
 ---
 
 ## 📸 Screenshots
+<img width="1024" height="1024" alt="Gemini_Generated_Image_4xynp34xynp34xyn" src="https://github.com/user-attachments/assets/36b21918-7f04-4a0e-8249-6fe7ef05f65f" />
+<img width="328" height="732" alt="image" src="https://github.com/user-attachments/assets/d2734dda-f7a5-4220-a021-4bcee3a0ea9a" /> <img width="334" height="742" alt="image" src="https://github.com/user-attachments/assets/dbf71913-0fb9-4d51-ba66-20dc657d4f4f" />
+
+
+<img width="329" height="737" alt="image" src="https://github.com/user-attachments/assets/688e41f3-ba76-4a1c-a4ce-9840198858cb" />
+
+
 <img width="1687" height="566" alt="image" src="https://github.com/user-attachments/assets/875334c8-53ec-4eca-b6b4-c64805f15230" />
+
+
  
 
 ---
